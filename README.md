@@ -319,3 +319,4 @@ embedding_store = EmbeddingStore(
 
 **Приятного обучения! 🚀**
 
+# AI-Assistant-RAG-Cache
