@@ -62,7 +62,7 @@ def initialize_system():
     print("\n[3/3] Инициализация RAG-ассистента...")
     rag_assistant = RAGAssistant(
         embedding_store=embedding_store,
-        model="gpt-3.5-turbo",
+        model="gpt-4o-mini",
         temperature=0.7
     )
     
