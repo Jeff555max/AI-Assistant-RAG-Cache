@@ -42,9 +42,12 @@ class RAGAssistant:
         self.model = model
         self.temperature = temperature
         
-        # Инициализируем клиент OpenAI
+        # Инициализируем клиент OpenAI с увеличенным таймаутом
         # API ключ берется из параметра или переменной окружения OPENAI_API_KEY
-        self.client = OpenAI(api_key=api_key or os.getenv("OPENAI_API_KEY"))
+        self.client = OpenAI(
+            api_key=api_key or os.getenv("OPENAI_API_KEY"),
+            timeout=60.0  # Таймаут 60 секунд для запросов к OpenAI
+        )
         
         print(f"✓ RAG-ассистент инициализирован (модель: {model})")
     

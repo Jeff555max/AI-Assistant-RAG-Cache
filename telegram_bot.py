@@ -49,8 +49,16 @@ class TelegramRAGBot:
         self.cache = cache
         self.logger = logger
         
-        # Создаем приложение Telegram
-        self.application = Application.builder().token(token).build()
+        # Создаем приложение Telegram с увеличенным таймаутом
+        self.application = (
+            Application.builder()
+            .token(token)
+            .connect_timeout(30.0)
+            .read_timeout(30.0)
+            .write_timeout(30.0)
+            .pool_timeout(30.0)
+            .build()
+        )
         
         # Регистрируем обработчики команд
         self.application.add_handler(CommandHandler("start", self.start_command))

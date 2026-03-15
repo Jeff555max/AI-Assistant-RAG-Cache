@@ -47,9 +47,12 @@ class EmbeddingStore:
             )
         )
         
-        # Инициализируем клиент OpenAI для создания эмбеддингов
+        # Инициализируем клиент OpenAI для создания эмбеддингов с увеличенным таймаутом
         # API ключ берется из параметра или переменной окружения OPENAI_API_KEY
-        self.openai_client = OpenAI(api_key=api_key or os.getenv("OPENAI_API_KEY"))
+        self.openai_client = OpenAI(
+            api_key=api_key or os.getenv("OPENAI_API_KEY"),
+            timeout=60.0  # Таймаут 60 секунд для запросов к OpenAI
+        )
         self.embedding_model = embedding_model
         
         print(f"Модель эмбеддингов: {embedding_model} (OpenAI API)")
