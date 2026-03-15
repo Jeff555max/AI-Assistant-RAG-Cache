@@ -15,6 +15,7 @@ cache.json
 chroma_db/
 logs.db
 logs_*.csv
+*.csv
 
 # IDE
 .vscode/
