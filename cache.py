@@ -106,9 +106,9 @@ class ResponseCache:
             try:
                 with open(self.cache_file, 'r', encoding='utf-8') as f:
                     self.cache = json.load(f)
-                print(f"✓ Загружен кеш с {len(self.cache)} записями")
+                # Убираем вывод для совместимости с Windows консолью
             except Exception as e:
-                print(f"⚠ Предупреждение: не удалось загрузить кеш: {e}")
+                # Убираем вывод для совместимости с Windows консолью
                 self.cache = {}
     
     def clear(self) -> None:
@@ -118,7 +118,7 @@ class ResponseCache:
         self.cache = {}
         if self.cache_file.exists():
             self.cache_file.unlink()
-        print("✓ Кеш очищен")
+        # Убираем вывод для совместимости с Windows консолью
     
     def size(self) -> int:
         """
