@@ -68,7 +68,7 @@ class DatabaseLogger:
         
         conn.commit()
         conn.close()
-        print(f"✓ База данных логов инициализирована: {self.db_path}")
+        # Убираем вывод с эмодзи для совместимости с Windows консолью
     
     def log_interaction(
         self,
