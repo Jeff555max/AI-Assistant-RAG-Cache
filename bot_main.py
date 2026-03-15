@@ -17,6 +17,12 @@ def main():
     """
     Главная функция для запуска Telegram бота.
     """
+    # Устанавливаем UTF-8 для вывода в консоль Windows
+    import sys
+    if sys.platform == 'win32':
+        import io
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+    
     print("=" * 70)
     print("🤖 ИНИЦИАЛИЗАЦИЯ TELEGRAM RAG-БОТА")
     print("=" * 70)
