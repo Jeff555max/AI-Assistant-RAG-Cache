@@ -14,7 +14,7 @@ import io
 
 class DatabaseLogger:
     """
-    Класс для логирования взаимодействий в SQLite базу данных.
+    Класс для логирования взаимодействий в SQLite базу данных и CSV файл.
     
     Хранит:
     - Вопросы пользователей
@@ -23,15 +23,18 @@ class DatabaseLogger:
     - Статус (из кеша или новый запрос)
     """
     
-    def __init__(self, db_path: str = "logs.db"):
+    def __init__(self, db_path: str = "logs.db", csv_path: str = "logs.csv"):
         """
         Инициализация логгера базы данных.
         
         Args:
             db_path: Путь к файлу базы данных SQLite
+            csv_path: Путь к CSV файлу для логов
         """
         self.db_path = Path(db_path)
+        self.csv_path = Path(csv_path)
         self._init_database()
+        self._init_csv()
     
     def _init_database(self) -> None:
         """
@@ -70,6 +73,34 @@ class DatabaseLogger:
         conn.close()
         # Убираем вывод с эмодзи для совместимости с Windows консолью
     
+    def _init_csv(self) -> None:
+        """
+        Создает CSV файл с заголовками, если он не существует.
+        """
+        if not self.csv_path.exists():
+            fieldnames = [
+                'id', 'timestamp', 'user_id', 'username', 'source',
+                'query', 'response', 'from_cache', 'response_time_ms', 'created_at'
+            ]
+            with open(self.csv_path, 'w', newline='', encoding='utf-8') as f:
+                writer = csv.DictWriter(f, fieldnames=fieldnames)
+                writer.writeheader()
+    
+    def _append_to_csv(self, row: dict) -> None:
+        """
+        Дописывает одну запись в CSV файл.
+        
+        Args:
+            row: Словарь с данными для записи
+        """
+        fieldnames = [
+            'id', 'timestamp', 'user_id', 'username', 'source', 
+            'query', 'response', 'from_cache', 'response_time_ms', 'created_at'
+        ]
+        with open(self.csv_path, 'a', newline='', encoding='utf-8') as f:
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer.writerow(row)
+        
     def log_interaction(
         self,
         query: str,
@@ -113,9 +144,26 @@ class DatabaseLogger:
             response_time_ms
         ))
         
+        # Получаем ID вставленной записи
+        row_id = cursor.lastrowid
+        
         conn.commit()
         conn.close()
-    
+        
+        # Записываем в CSV файл
+        self._append_to_csv({
+            'id': row_id,
+            'timestamp': timestamp,
+            'user_id': user_id or '',
+            'username': username or '',
+            'source': source,
+            'query': query,
+            'response': response,
+            'from_cache': 1 if from_cache else 0,
+            'response_time_ms': response_time_ms or '',
+            'created_at': timestamp
+        })
+        
     def get_logs(
         self,
         limit: Optional[int] = None,
