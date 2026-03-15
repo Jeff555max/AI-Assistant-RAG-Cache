@@ -12,6 +12,8 @@ ENV/
 .env
 cache.json
 chroma_db/
+logs.db
+logs_*.csv
 
 # IDE
 .vscode/

@@ -9,3 +9,6 @@ chromadb>=0.4.22
 # Загрузка переменных окружения из .env файла
 python-dotenv>=1.0.0
 
+# Telegram Bot API для работы с Telegram ботом
+python-telegram-bot>=20.0
+
